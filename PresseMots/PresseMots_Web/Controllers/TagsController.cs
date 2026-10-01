@@ -24,7 +24,8 @@ namespace PresseMots.Controllers
         // GET: Tags/Create
         public IActionResult Create()
         {
-            return View();
+            Tag tag = new Tag();
+            return View(tag);
         }
 
         // POST: Tags/Create
@@ -37,7 +38,7 @@ namespace PresseMots.Controllers
             if (ModelState.IsValid)
             {
                 _context.tags.Add(tag);
-                _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(tag);
@@ -46,9 +47,13 @@ namespace PresseMots.Controllers
         // GET: Tags/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-           /*..?*/
+            Tag? tag = _context.tags.Find(id);
+            if(tag == null)
+            {
+                return NotFound();
+            }
 
-            return View(/*..*/);
+            return View(tag);
         }
 
         // POST: Tags/Delete/5
@@ -56,7 +61,13 @@ namespace PresseMots.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            /*...*/
+            Tag? tag = _context.tags.Find(id);
+            if(tag == null)
+            {
+                return NotFound();
+            }
+            _context.tags.Remove(tag);
+            _context.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }

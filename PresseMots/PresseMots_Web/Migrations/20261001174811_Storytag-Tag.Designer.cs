@@ -12,8 +12,8 @@ using PresseMots.Models.Data;
 namespace PresseMots.Migrations
 {
     [DbContext(typeof(PresseMotsDbContext))]
-    [Migration("20261001165634_Class_Tag")]
-    partial class Class_Tag
+    [Migration("20261001174811_Storytag-Tag")]
+    partial class StorytagTag
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -200,6 +200,29 @@ namespace PresseMots.Migrations
                         });
                 });
 
+            modelBuilder.Entity("PresseMots.Models.StoryTag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("StoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StoryId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("storyTags");
+                });
+
             modelBuilder.Entity("PresseMots.Models.Tag", b =>
                 {
                     b.Property<int>("Id")
@@ -244,21 +267,6 @@ namespace PresseMots.Migrations
                             Email = "snoopy@peanuts.com",
                             Username = "Snoopy"
                         });
-                });
-
-            modelBuilder.Entity("StoryTag", b =>
-                {
-                    b.Property<int>("StoriesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TagsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("StoriesId", "TagsId");
-
-                    b.HasIndex("TagsId");
-
-                    b.ToTable("StoryTag");
                 });
 
             modelBuilder.Entity("PresseMots.Models.Comment", b =>
@@ -320,19 +328,23 @@ namespace PresseMots.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("StoryTag", b =>
+            modelBuilder.Entity("PresseMots.Models.StoryTag", b =>
                 {
-                    b.HasOne("PresseMots.Models.Story", null)
-                        .WithMany()
-                        .HasForeignKey("StoriesId")
+                    b.HasOne("PresseMots.Models.Story", "Story")
+                        .WithMany("StoryTags")
+                        .HasForeignKey("StoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PresseMots.Models.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagsId")
+                    b.HasOne("PresseMots.Models.Tag", "Tag")
+                        .WithMany("StoryTags")
+                        .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Story");
+
+                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("PresseMots.Models.Story", b =>
@@ -342,6 +354,13 @@ namespace PresseMots.Migrations
                     b.Navigation("Likes");
 
                     b.Navigation("Shares");
+
+                    b.Navigation("StoryTags");
+                });
+
+            modelBuilder.Entity("PresseMots.Models.Tag", b =>
+                {
+                    b.Navigation("StoryTags");
                 });
 
             modelBuilder.Entity("PresseMots.Models.User", b =>

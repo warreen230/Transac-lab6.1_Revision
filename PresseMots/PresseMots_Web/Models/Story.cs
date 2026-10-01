@@ -37,9 +37,7 @@ namespace PresseMots.Models
         public virtual IList<Share> Shares { get; set; }
 
         public virtual IList<Comment> Comments { get; set; }
-
-        [ValidateNever]
-        public virtual List<Story>? Stories { get; set; }
+        public virtual List<StoryTag>? StoryTags { get; set; }
 
     }
 }

@@ -5,7 +5,7 @@
 namespace PresseMots.Migrations
 {
     /// <inheritdoc />
-    public partial class Class_Tag : Migration
+    public partial class StorytagTag : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,40 +24,47 @@ namespace PresseMots.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "StoryTag",
+                name: "storyTags",
                 columns: table => new
                 {
-                    StoriesId = table.Column<int>(type: "int", nullable: false),
-                    TagsId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TagId = table.Column<int>(type: "int", nullable: false),
+                    StoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StoryTag", x => new { x.StoriesId, x.TagsId });
+                    table.PrimaryKey("PK_storyTags", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_StoryTag_Stories_StoriesId",
-                        column: x => x.StoriesId,
+                        name: "FK_storyTags_Stories_StoryId",
+                        column: x => x.StoryId,
                         principalTable: "Stories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StoryTag_tags_TagsId",
-                        column: x => x.TagsId,
+                        name: "FK_storyTags_tags_TagId",
+                        column: x => x.TagId,
                         principalTable: "tags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_StoryTag_TagsId",
-                table: "StoryTag",
-                column: "TagsId");
+                name: "IX_storyTags_StoryId",
+                table: "storyTags",
+                column: "StoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_storyTags_TagId",
+                table: "storyTags",
+                column: "TagId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "StoryTag");
+                name: "storyTags");
 
             migrationBuilder.DropTable(
                 name: "tags");
