@@ -1,4 +1,5 @@
-﻿using PresseMots.Utility;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using PresseMots.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -24,9 +25,6 @@ namespace PresseMots.Models
 
         [DataType(DataType.MultilineText)]
         public string Content { get; set; }
-
-        [NotMapped]
-        public IList<string> Tags { get; set; } = new List<string>();
         public DateTime CreationTime { get; set; }
         public DateTime? LastEditTime { get; set; }
         public DateTime? PublishTime { get; set; }
@@ -40,6 +38,8 @@ namespace PresseMots.Models
 
         public virtual IList<Comment> Comments { get; set; }
 
+        [ValidateNever]
+        public virtual List<Story>? Stories { get; set; }
 
     }
 }
